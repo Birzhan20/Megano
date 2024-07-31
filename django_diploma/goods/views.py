@@ -1,19 +1,21 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-
+from rest_framework import viewsets
 from .models import Product
+from .serializers import ProductSerializer
+from rest_framework.views import APIView
+from django.shortcuts import render
 
 
-class ProductTemplateView(TemplateView):
-    template_name = 'frontend/product.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        product_id = kwargs.get('id')
+class ProductDetailAPIView(APIView):
+    def get(self, request, id, format=None):
         try:
-            product = Product.objects.get(id=product_id)
+            product = Product.objects.get(pk=id)
         except Product.DoesNotExist:
-            product = None
-        context['product'] = product
-        return context
+            return render(request, 'frontend/product.html', {'product': None})
 
+        serializer = ProductSerializer(product)
+        return render(request, 'frontend/product.html', {'product': serializer.data})
+
+
+# class ProductViewSet(viewsets.ModelViewSet):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer

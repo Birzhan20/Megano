@@ -1,27 +1,48 @@
 from django.contrib import admin
 
-from .models import Product, Review
+from .models import Product, Review, Image
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description', 'price', 'quantity']
-    list_editable = ['price', 'quantity']
-    list_display_links = ['name']
-    search_fields = ['name', 'description']
-    list_filter = ['name', 'price', 'quantity']
+    list_display = ['description', 'price', 'count', 'title']
+    list_editable = ['price', 'count']
+    list_display_links = ['title']
+    search_fields = ['title', 'description']
+    list_filter = ['price', 'count']
     fields = [
-        'name',
-        'image',
+        'category',
+        'count',
+        'date',
+        'title',
+        'tags',
         'price',
-        'quantity',
         'description',
+        'full_description',
+        'free_delivery',
     ]
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['author', 'product', 'created_at', 'comment']
-    list_display_links = ['created_at']
+    list_display = ['author', 'product', 'date', 'text']
+    list_display_links = ['date']
     search_fields = ['author', 'product']
-    list_filter = ['author', 'product', 'created_at',]
+    list_filter = ['author', 'product', 'date',]
+    fields = [
+        'product',
+        'author',
+        'email',
+        'text',
+        'rate',
+        'date',
+    ]
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['product']
+    fields = [
+        'alt',
+        'product',
+    ]
