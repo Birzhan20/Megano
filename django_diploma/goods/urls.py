@@ -1,7 +1,14 @@
-# from django.urls import path, include
-# from .views import ProductViewSet
-#
-#
-# urlpatterns = [
-#     path('', ProductViewSet.as_view({'get': 'list'}), name='product'),
-# ]
+# goods/urls.py
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ProductViewSet
+
+# Создайте роутер и зарегистрируйте в нем ViewSet
+router = DefaultRouter()
+router.register('products', ProductViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+

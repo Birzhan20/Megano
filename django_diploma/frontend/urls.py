@@ -1,7 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from goods.views import ProductDetailAPIView
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name="frontend/index.html")),
@@ -14,7 +13,7 @@ urlpatterns = [
     path('orders/<int:id>/', TemplateView.as_view(template_name="frontend/order.html")),
     path('payment/<int:id>/', TemplateView.as_view(template_name="frontend/payment.html")),
     path('payment-someone/', TemplateView.as_view(template_name="frontend/paymentsomeone.html")),
-    path('product/<int:id>/', ProductDetailAPIView.as_view()),  # template_name="frontend/product.html"
+    path('product/<int:id>/', TemplateView.as_view(template_name="frontend/product.html")),
     path('profile/', TemplateView.as_view(template_name="frontend/profile.html")),
     path('progress-payment/', TemplateView.as_view(template_name="frontend/progressPayment.html")),
     path('sale/', TemplateView.as_view(template_name="frontend/sale.html")),
