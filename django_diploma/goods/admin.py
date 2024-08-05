@@ -18,8 +18,8 @@ class ProductAdmin(admin.ModelAdmin):
         'tags',
         'price',
         'description',
-        'full_description',
-        'free_delivery',
+        'fullDescription',
+        'freeDelivery',
     ]
 
 
@@ -45,4 +45,5 @@ class ImageAdmin(admin.ModelAdmin):
     fields = [
         'alt',
         'product',
+        'src',
     ]

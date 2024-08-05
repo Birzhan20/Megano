@@ -19,14 +19,14 @@ class Product(models.Model):
     date = models.DateTimeField()
     title = models.CharField(max_length=255)
     description = models.TextField()
-    full_description = models.TextField()
-    free_delivery = models.BooleanField(default=False)
+    fullDescription = models.TextField()
+    freeDelivery = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
 
 
 class Image(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    src = models.ImageField(blank=True)
+    src = models.ImageField(blank=False)
     alt = models.CharField(max_length=255)
 
 
