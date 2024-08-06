@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from users.views import SignInApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('users.urls')),
     path('', include('frontend.urls')),
     path('api/', include('goods.urls')),
-    path('api/cart/', include('carts.urls')),
+    path('api/', include('carts.urls')),
 ]
 
 if settings.DEBUG:

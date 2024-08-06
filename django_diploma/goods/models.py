@@ -37,3 +37,8 @@ class Review(models.Model):
     text = models.TextField()
     rate = models.PositiveIntegerField()
     date = models.DateTimeField()
+
+
+# class Specifications(models.Model):
+#     name = models.CharField()
+#     value = models.CharField()

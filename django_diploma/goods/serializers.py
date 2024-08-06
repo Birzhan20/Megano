@@ -19,6 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects.all(), many=True)
+    
 
     class Meta:
         model = Product
