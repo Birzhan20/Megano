@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'main',
     'orders',
     'users',
+    'catalog',
 ]
 
 MIDDLEWARE = [
@@ -91,14 +92,22 @@ WSGI_APPLICATION = 'django_diploma.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_diploma',
-        'USER': 'postgres',
-        'PASSWORD': '111',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'django_diploma',
+#         'USER': 'postgres',
+#         'PASSWORD': '111',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 REQUEST_LOGGING = {
