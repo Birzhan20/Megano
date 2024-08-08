@@ -16,16 +16,20 @@ class SignUpView(APIView):
             user_data = json.loads(request.body)
             username = user_data.get("username")
             password = user_data.get("password")
-            first_name = user_data.get("first_name")
+            first_name = user_data.get("first_name", "")
 
-            if not username or not password or not first_name:
+            # Проверка на наличие всех необходимых полей
+            if not username or not password:
                 return JsonResponse({"error": "Missing fields"}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Проверка на уникальность username
             if User.objects.filter(username=username).exists():
                 return JsonResponse({"error": "Username already taken"}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Создание пользователя
             user = User.objects.create_user(username=username, password=password, first_name=first_name)
             return JsonResponse({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
