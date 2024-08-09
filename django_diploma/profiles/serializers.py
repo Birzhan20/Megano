@@ -9,7 +9,7 @@ class AvatarSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    avatar = AvatarSerializer(read_only=True)  # Используйте read_only=True, если не требуется записывать данные
+    avatar = AvatarSerializer(read_only=True)
 
     class Meta:
         model = Profile
