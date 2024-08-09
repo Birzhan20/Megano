@@ -11,14 +11,15 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField(required=False, read_only=True)
+
     class Meta:
         model = Review
-        fields = ['author', 'email', 'text', 'rate', 'date', 'product']
-        read_only_fields = ['date', 'product']
+        fields = ['author', 'email', 'text', 'rate', 'date']
 
     def create(self, validated_data):
-        validated_data['date'] = timezone.now()
-        return super().create(validated_data)
+        product = self.context.get('product')
+        return Review.objects.create(product=product, **validated_data)
 
 
 class ProductSerializer(serializers.ModelSerializer):

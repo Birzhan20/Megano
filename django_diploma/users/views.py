@@ -6,8 +6,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 
-from .serializers import SignInSerializer, SignUpSerializer, ProfileSerializer
-from .models import Profile
+from .serializers import SignInSerializer, SignUpSerializer
 
 
 class SignUpView(APIView):
@@ -51,8 +50,3 @@ class SignOutView(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "User signed out successfully"}, status=status.HTTP_200_OK)
-
-
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer

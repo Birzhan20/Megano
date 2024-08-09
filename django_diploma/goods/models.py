@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 
 
@@ -36,7 +38,7 @@ class Review(models.Model):
     email = models.EmailField()
     text = models.TextField()
     rate = models.PositiveIntegerField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=timezone.now)
 
 
 # class Specifications(models.Model):
