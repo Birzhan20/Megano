@@ -19,7 +19,7 @@ class ProfileAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            profile = request.user.profile  # Предполагается, что профиль связан с пользователем через OneToOneField
+            profile = request.user.profile
             serializer = ProfileSerializer(profile, data=request.data, partial=True)
 
             if serializer.is_valid():

@@ -1,7 +1,19 @@
 from django.utils import timezone
 
 from rest_framework import serializers
-from .models import Product, Category, Tag, Image, Review
+from .models import Product, Category, Tag, Image, Review, Specifications
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = 'name'
+
+
+class SpecificationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specifications
+        fields = ['name', 'value']
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -27,10 +39,12 @@ class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects.all(), many=True)
+    specifications = SpecificationsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
         fields = [
             'id', 'category', 'price', 'count', 'date', 'title',
-            'description', 'fullDescription', 'freeDelivery', 'images', 'tags', 'reviews'
+            'description', 'fullDescription', 'freeDelivery',
+            'images', 'tags', 'reviews', 'specifications', 'rating'
         ]

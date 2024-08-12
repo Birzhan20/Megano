@@ -1,6 +1,33 @@
 from django.contrib import admin
 
-from .models import Product, Review, Image
+from .models import Product, Review, Image, Specifications, Tag, Category
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'product']
+
+
+@admin.register(Tag)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'product']
+
+
+@admin.register(Specifications)
+class SpecificationsAdmin(admin.ModelAdmin):
+    list_display = ['name', 'value']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'value', 'product']
 
 
 @admin.register(Product)
@@ -41,9 +68,14 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ['product']
+    list_display = ['product_title']
     fields = [
         'alt',
         'product',
         'src',
     ]
+
+    def product_title(self, obj):
+        return obj.product.title
+
+    product_title.short_description = 'Product Title'

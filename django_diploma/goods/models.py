@@ -6,6 +6,9 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -24,12 +27,24 @@ class Product(models.Model):
     fullDescription = models.TextField()
     freeDelivery = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
+    rating = models.FloatField(default=0.0)
+
+    def calculate_rating(self):
+        reviews = self.reviews.all()
+        if reviews.exists():
+            total_rating = sum(review.rate for review in reviews)
+            average_rating = total_rating / reviews.count()
+            return average_rating
+        return 0.0
 
 
 class Image(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
     src = models.ImageField(blank=False)
     alt = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.product.title
 
 
 class Review(models.Model):
@@ -41,6 +56,10 @@ class Review(models.Model):
     date = models.DateTimeField(default=timezone.now)
 
 
-# class Specifications(models.Model):
-#     name = models.CharField()
-#     value = models.CharField()
+class Specifications(models.Model):
+    product = models.ForeignKey(Product, related_name='specifications', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

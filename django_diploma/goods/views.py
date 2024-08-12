@@ -6,13 +6,22 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import redirect
 
-from .models import Product, Review
+from catalog.serializers import TagSerializer
+from .models import Product, Review, Tag
 from .serializers import ProductSerializer, ReviewSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class TagsView(APIView):
+
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
 
 
 class CreateReviewView(APIView):
