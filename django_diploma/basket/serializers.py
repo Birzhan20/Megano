@@ -17,7 +17,8 @@ class BasketItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Basket
-        fields = ['id', 'category', 'price', 'count', 'date', 'title', 'description', 'freeDelivery', 'images', 'tags', 'reviews', 'rating']
+        fields = ['id', 'category', 'price', 'count', 'date', 'title', 'description',
+                  'freeDelivery', 'images', 'tags', 'reviews', 'rating']
 
     def get_images(self, obj):
         return [{'src': image.src.url, 'alt': image.alt} for image in obj.product.images.all()]
