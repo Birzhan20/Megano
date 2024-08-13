@@ -47,6 +47,10 @@ class ProductAdmin(admin.ModelAdmin):
         'description',
         'fullDescription',
         'freeDelivery',
+        'popular',
+        'limited',
+        'sales',
+        'banners',
     ]
 
 

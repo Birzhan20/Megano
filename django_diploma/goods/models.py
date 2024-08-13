@@ -28,6 +28,10 @@ class Product(models.Model):
     freeDelivery = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
     rating = models.FloatField(default=0.0)
+    popular = models.BooleanField(default=False)
+    limited = models.BooleanField(default=False)
+    sales = models.BooleanField(default=False)
+    banners = models.BooleanField(default=False)
 
     def calculate_rating(self):
         reviews = self.reviews.all()

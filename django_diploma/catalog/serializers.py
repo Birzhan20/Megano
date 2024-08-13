@@ -1,12 +1,27 @@
 from rest_framework import serializers
 from goods.models import Product, Image, Tag, Review, Specifications
-from .models import Category, SubCategory, Image
+from .models import Category, SubCategory, Image, SaleProduct, SaleImage
+
+
+class SaleImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaleImage
+        fields = ['src', 'alt']
+
+
+class SaleProductSerializer(serializers.ModelSerializer):
+    images = SaleImageSerializer(many=True)
+
+    class Meta:
+        model = SaleProduct
+        fields = ['id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'images']
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['src', 'alt']
+
 
 class SubCategorySerializer(serializers.ModelSerializer):
     image = ImageSerializer()
@@ -15,6 +30,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
         model = SubCategory
         fields = ['id', 'title', 'image']
 
+
 class CategorySerializer(serializers.ModelSerializer):
     image = ImageSerializer()
     subcategories = SubCategorySerializer(many=True)
@@ -22,17 +38,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title', 'image', 'subcategories']
-
-
-
-
-
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['src', 'alt']
 
 
 class TagSerializer(serializers.ModelSerializer):
