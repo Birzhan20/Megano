@@ -4,8 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Profile, Avatar
 from .serializers import ProfileSerializer, PasswordSerializer, AvatarSerializer
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
+@method_decorator(cache_page(60*10), name='dispatch')
 class ProfileAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

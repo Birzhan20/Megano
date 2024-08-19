@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 from goods.models import Product
 
@@ -14,14 +16,10 @@ class Order(models.Model):
     city = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
 
-    def __str__(self):
-        return f"Order {self.id} by {self.fullName}"
-
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, related_name='products', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
 
-    def __str__(self):
-        return f"{self.product.title} in order {self.order.id}"
+

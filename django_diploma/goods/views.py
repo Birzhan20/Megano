@@ -9,13 +9,17 @@ from django.shortcuts import redirect
 from catalog.serializers import TagSerializer
 from .models import Product, Review, Tag
 from .serializers import ProductSerializer, ReviewSerializer
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
+@method_decorator(cache_page(60*30), name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
+@method_decorator(cache_page(60*30), name='dispatch')
 class TagsView(APIView):
 
     def get(self, request):

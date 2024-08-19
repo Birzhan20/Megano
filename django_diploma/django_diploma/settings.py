@@ -47,8 +47,6 @@ INSTALLED_APPS = [
 
     'frontend',
     'goods',
-    'carts',
-    'main',
     'orders',
     'users',
     'catalog',
