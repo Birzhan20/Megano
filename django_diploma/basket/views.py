@@ -8,7 +8,6 @@ from django.views.decorators.cache import cache_page
 
 
 class BasketView(APIView):
-    @method_decorator(cache_page(60 * 1), name='dispatch')
     def get(self, request):
         session_key = request.session.session_key
         if not session_key:
@@ -71,4 +70,4 @@ class BasketView(APIView):
         serializer = BasketItemSerializer(basket_items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
+

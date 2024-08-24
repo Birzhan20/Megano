@@ -1,20 +1,6 @@
 from rest_framework import serializers
 from goods.models import Product, Image, Tag, Review, Specifications
-from .models import Category, SubCategory, Image, SaleProduct, SaleImage
-
-
-class SaleImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SaleImage
-        fields = ['src', 'alt']
-
-
-class SaleProductSerializer(serializers.ModelSerializer):
-    images = SaleImageSerializer(many=True)
-
-    class Meta:
-        model = SaleProduct
-        fields = ['id', 'price', 'salePrice', 'dateFrom', 'dateTo', 'title', 'images']
+from .models import Category, SubCategory, Image
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -64,3 +50,25 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_reviews(self, obj):
         return obj.reviews.count()
+
+
+class SalesSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "price",
+            "salePrice",
+            "dateFrom",
+            "dateTo",
+            "title",
+            "images",
+        ]
+
+    def to_representation(self, instance):
+        data = super(SalesSerializer, self).to_representation(instance)
+        data['dateFrom'] = data['dateFrom'][5:]
+        data['dateTo'] = data['dateTo'][5:]
+        return data

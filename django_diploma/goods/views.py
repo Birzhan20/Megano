@@ -1,19 +1,15 @@
-from datetime import datetime
-import json
-
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from catalog.serializers import TagSerializer
 from .models import Product, Review, Tag
 from .serializers import ProductSerializer, ReviewSerializer
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 
 
-@method_decorator(cache_page(60*30), name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -21,6 +17,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 @method_decorator(cache_page(60*30), name='dispatch')
 class TagsView(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
         tags = Tag.objects.all()
@@ -29,6 +26,7 @@ class TagsView(APIView):
 
 
 class CreateReviewView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request, product_id):
         try:
@@ -41,4 +39,3 @@ class CreateReviewView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

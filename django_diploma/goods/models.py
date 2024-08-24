@@ -1,5 +1,5 @@
+from datetime import datetime
 from django.utils import timezone
-
 from django.db import models
 
 
@@ -17,11 +17,18 @@ class Tag(models.Model):
         return self.name
 
 
+def default_date():
+    return datetime(2024, 10, 23, 0, 0)
+
+
 class Product(models.Model):
     category = models.ForeignKey(Category, blank=True, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    salePrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     count = models.PositiveIntegerField()
     date = models.DateTimeField()
+    dateFrom = models.DateTimeField(default=timezone.now)
+    dateTo = models.DateTimeField(default=default_date())
     title = models.CharField(max_length=255)
     description = models.TextField()
     fullDescription = models.TextField()
@@ -40,6 +47,9 @@ class Product(models.Model):
             average_rating = total_rating / reviews.count()
             return average_rating
         return 0.0
+
+    def __str__(self):
+        return self.title
 
 
 class Image(models.Model):

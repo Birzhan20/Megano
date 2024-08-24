@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderProduct
+from .models import Order
 from goods.models import Product, Image, Tag
 
 
@@ -27,17 +27,8 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 
-class OrderProductSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()
-
-    class Meta:
-        model = OrderProduct
-        fields = ['product', 'count', 'date']
-
-
 class OrderSerializer(serializers.ModelSerializer):
-    products = OrderProductSerializer(many=True, read_only=True)
-
+    products = ProductSerializer(many=True)
     class Meta:
         model = Order
         fields = [
