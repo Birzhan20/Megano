@@ -17,10 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.conf.urls.static import static
+from users.views import SignInApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('users.urls')),
     path('', include('frontend.urls')),
+    path('api/', include('goods.urls')),
+    path('api/', include('basket.urls')),
+    path('api/', include('profiles.urls')),
+    path('api/', include('catalog.urls')),
+    path('api/', include('orders.urls')),
+    path('api/', include('payment.urls')),
 ]
 
 if settings.DEBUG:
@@ -28,3 +37,5 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

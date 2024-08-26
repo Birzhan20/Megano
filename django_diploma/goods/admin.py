@@ -1,27 +1,85 @@
 from django.contrib import admin
 
-from .models import Product, Review
+from .models import Product, Review, Image, Specifications, Tag, Category
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'product']
+
+
+@admin.register(Tag)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'product']
+
+
+@admin.register(Specifications)
+class SpecificationsAdmin(admin.ModelAdmin):
+    list_display = ['name', 'value']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name']
+    fields = ['name', 'value', 'product']
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description', 'price', 'quantity']
-    list_editable = ['price', 'quantity']
-    list_display_links = ['name']
-    search_fields = ['name', 'description']
-    list_filter = ['name', 'price', 'quantity']
+    list_display = ['description', 'price', 'count', 'title']
+    list_editable = ['price', 'count']
+    list_display_links = ['title']
+    search_fields = ['title', 'description']
+    list_filter = ['price', 'count']
     fields = [
-        'name',
-        'image',
+        'category',
+        'count',
+        'date',
+        'title',
+        'tags',
         'price',
-        'quantity',
         'description',
+        'fullDescription',
+        'freeDelivery',
+        'popular',
+        'limited',
+        'sales',
+        'banners',
     ]
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['author', 'product', 'created_at', 'comment']
-    list_display_links = ['created_at']
+    list_display = ['author', 'product', 'date', 'text']
+    list_display_links = ['date']
     search_fields = ['author', 'product']
-    list_filter = ['author', 'product', 'created_at',]
+    list_filter = ['author', 'product', 'date',]
+    fields = [
+        'product',
+        'author',
+        'email',
+        'text',
+        'rate',
+        'date',
+    ]
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['product_title']
+    fields = [
+        'alt',
+        'product',
+        'src',
+    ]
+
+    def product_title(self, obj):
+        return obj.product.title
+
+    product_title.short_description = 'Product Title'

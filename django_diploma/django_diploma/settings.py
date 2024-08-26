@@ -42,13 +42,17 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'request_logging',
+    'rest_framework',
+    'rest_framework_simplejwt',
 
     'frontend',
     'goods',
-    'carts',
-    'main',
     'orders',
     'users',
+    'catalog',
+    'profiles',
+    'basket',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +73,7 @@ ROOT_URLCONF = 'django_diploma.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,14 +94,22 @@ WSGI_APPLICATION = 'django_diploma.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_diploma',
-        'USER': 'postgres',
-        'PASSWORD': '111',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'django_diploma',
+#         'USER': 'postgres',
+#         'PASSWORD': '111',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 REQUEST_LOGGING = {
@@ -156,9 +168,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+    ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'uploads'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORKS = {
+    'DEFAULT_AUTHENTICATION_CLASSES': 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 8,
+}
