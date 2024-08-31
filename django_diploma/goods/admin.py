@@ -1,15 +1,7 @@
 from django.contrib import admin
 
-from .models import Product, Review, Image, Specifications, Tag, Category
+from .models import Product, Review, Image, Specifications, Tag
 
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    list_display_links = ['name']
-    search_fields = ['name']
-    list_filter = ['name']
-    fields = ['name', 'product']
 
 
 @admin.register(Tag)
@@ -18,7 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['name']
-    fields = ['name', 'product']
+    fields = ['name', 'product', 'category']
 
 
 @admin.register(Specifications)
@@ -42,7 +34,6 @@ class ProductAdmin(admin.ModelAdmin):
         'count',
         'date',
         'title',
-        'tags',
         'price',
         'description',
         'fullDescription',
@@ -51,6 +42,10 @@ class ProductAdmin(admin.ModelAdmin):
         'limited',
         'sales',
         'banners',
+        'subcategory',
+        'dateFrom',
+        'dateTo',
+        'salePrice'
     ]
 
 

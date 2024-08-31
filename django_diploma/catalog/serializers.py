@@ -14,16 +14,16 @@ class SubCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubCategory
-        fields = ['id', 'title', 'image']
+        fields = ("id", "title", "image",)
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    subcategories = SubCategorySerializer(many=True, required=False)
     image = ImageSerializer()
-    subcategories = SubCategorySerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ['id', 'title', 'image', 'subcategories']
+        fields = ('id', 'title', 'image', 'subcategories', )
 
 
 class TagSerializer(serializers.ModelSerializer):

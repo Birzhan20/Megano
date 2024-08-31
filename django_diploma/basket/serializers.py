@@ -1,27 +1,53 @@
 from rest_framework import serializers
+
+from goods.models import Product
 from .models import Basket
+from goods.serializers import (ReviewSerializer,
+                                 ProductImageSerializer,
+                                 ProductSerializer,
+                               TagSerializer)
 
 
-class BasketItemSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='product.id')
-    category = serializers.IntegerField(source='product.category.id')
-    price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2)
-    date = serializers.DateTimeField(source='date_added')
-    title = serializers.CharField(source='product.title')
-    description = serializers.CharField(source='product.description')
-    freeDelivery = serializers.BooleanField(source='product.freeDelivery')
-    images = serializers.SerializerMethodField()
-    tags = serializers.SerializerMethodField()
-    reviews = serializers.IntegerField(source='product.reviews.count')
-    rating = serializers.FloatField(source='product.rating')
+class BasketSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+    images = ProductImageSerializer(many=True)
+    i = 0
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "category",
+            "price",
+            "count",
+            "date",
+            "title",
+            "description",
+            "freeDelivery",
+            "images",
+            "tags",
+            "reviews",
+            "rating",
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["count"] = self.context['context'][self.i]
+        data["reviews"] = len(data["reviews"])
+        self.i += 1
+        return data
+
+
+class ItemInBasketSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(many=True)
 
     class Meta:
         model = Basket
-        fields = ['id', 'category', 'price', 'count', 'date', 'title', 'description',
-                  'freeDelivery', 'images', 'tags', 'reviews', 'rating']
+        fields = [
+            'product',
+            'count',
+        ]
 
-    def get_images(self, obj):
-        return [{'src': image.src.url, 'alt': image.alt} for image in obj.product.images.all()]
-
-    def get_tags(self, obj):
-        return [{'id': tag.id, 'name': tag.name} for tag in obj.product.tags.all()]
+    def to_internal_value(self, data):
+        return data

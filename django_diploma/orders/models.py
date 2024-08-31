@@ -91,11 +91,7 @@ class Order(models.Model):
         verbose_name='адрес'
     )
 
-    products = models.ManyToManyField(
-        Product,
-        related_name='orders',
-        verbose_name='Продукты заказа'
-    )
+    products = models.FileField(default=None)
 
     order_name = models.CharField(
         max_length=100,

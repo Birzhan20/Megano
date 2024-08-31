@@ -1,16 +1,42 @@
 from django.db import models
 from django.utils import timezone
+
+from goods.format_date import format_date
 from goods.models import Product
+from datetime import datetime
+
+from django.contrib.auth.models import User
+from django.db import models
 
 
 class Basket(models.Model):
-    session_key = models.CharField(max_length=255)  # Идентификатор сессии пользователя
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Ссылка на продукт
-    count = models.PositiveIntegerField()  # Количество товара
-    date_added = models.DateTimeField(default=timezone.now)  # Дата добавления в корзину
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             verbose_name="имя пользоваткля")
+
+    product = models.ForeignKey(Product,
+                                related_name='items',
+                                on_delete=models.CASCADE,
+                                verbose_name='товар')
+
+    count = models.PositiveIntegerField(null=True,
+                                        default=None,
+                                        verbose_name='количество', )
+
+    date = models.CharField(default=format_date(datetime.now()),
+                            max_length=100)
+
+    order = models.PositiveIntegerField(null=True,
+                                        default=None,
+                                        verbose_name='номер заказа', )
 
     class Meta:
-        unique_together = ('session_key', 'product')  # Уникальность корзины по сессии и продукту
+        verbose_name = 'Товар_в_корзине_пользователя'
+        verbose_name_plural = 'Товары в корзинах пользователей'
+        ordering = ['id', ]
 
-    def __str__(self):
-        return f"{self.product.title} in basket for session {self.session_key}"
+    def __str__(self) -> str:
+        """Заголовок страницы описания товара."""
+
+        return (f"Товар_в_корзине_пользователя: (id объекта = {self.id},"
+                f"\nимя пользователя: {self.user})")

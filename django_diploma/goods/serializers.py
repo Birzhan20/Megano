@@ -1,50 +1,71 @@
-from django.utils import timezone
-
 from rest_framework import serializers
-from .models import Product, Category, Tag, Image, Review, Specifications
+
+from .models import Review, Product, Specifications, Image, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = 'name'
-
-
-class SpecificationsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Specifications
-        fields = ['name', 'value']
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['src', 'alt']
+        fields = ['id', 'name',]
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    date = serializers.DateTimeField(required=False, read_only=True)
 
     class Meta:
         model = Review
-        fields = ['author', 'email', 'text', 'rate', 'date']
+        fields = ['author', 'email', 'text', 'rate', 'date', 'product']
 
-    def create(self, validated_data):
-        product = self.context.get('product')
-        return Review.objects.create(product=product, **validated_data)
+    def to_representation(self, instance):
+        data = super(ReviewSerializer, self).to_representation(instance)
+        data.pop('product')
+        return data
+
+
+class SpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specifications
+        fields = ['value', 'name']
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Image
+        fields = [
+            'src',
+            'alt',
+        ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True)
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    tags = serializers.SlugRelatedField(slug_field='name', queryset=Tag.objects.all(), many=True)
-    specifications = SpecificationsSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True)
+    reviews = ReviewSerializer(many=True)
+    specifications = SpecificationSerializer(many=True)
+    price = serializers.DecimalField(max_digits=8, decimal_places=2)
+    images = ProductImageSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = [
-            'id', 'category', 'price', 'count', 'date', 'title',
-            'description', 'fullDescription', 'freeDelivery',
-            'images', 'tags', 'reviews', 'specifications', 'rating'
-        ]
+        fields = (
+            "id",
+            "category",
+            "price",
+            "count",
+            "date",
+            "title",
+            "description",
+            "fullDescription",
+            "freeDelivery",
+            "images",
+            "tags",
+            "reviews",
+            "specifications",
+            "rating",
+        )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tags'] = [item['name'] for item in data['tags']]
+        if not data['images']:
+            data['images'] = [{'alt': 'no image'}]
+        return data

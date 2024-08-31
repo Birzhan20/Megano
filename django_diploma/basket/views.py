@@ -1,73 +1,76 @@
+from django.http import HttpResponseRedirect
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Basket, Product
-from .serializers import BasketItemSerializer
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+
+from basket.models import Basket
+from basket.serializers import BasketSerializer, ItemInBasketSerializer
+from goods.models import Product
 
 
-class BasketView(APIView):
-    def get(self, request):
-        session_key = request.session.session_key
-        if not session_key:
-            request.session.create()
-            session_key = request.session.session_key
+class BasketAPIView(APIView):
+    permission_classes = (AllowAny,)
+    queryset = Basket.objects.all()
 
-        basket_items = Basket.objects.filter(session_key=session_key).select_related('product')
-        if not basket_items.exists():
-            return Response({'error': 'Basket is empty'}, status=status.HTTP_404_NOT_FOUND)
+    def get(self, request: Request):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/sign-in')
+        items = (self.queryset
+                 .order_by('product_id')
+                 .filter(user_id=request.user.id)
+                 .select_related('product'))
 
-        serializer = BasketItemSerializer(basket_items, many=True)
-        return Response(serializer.data)
+        products_id = [item.product.id for item in items]
 
-    def post(self, request, *args, **kwargs):
-        product_id = request.data.get('id')
-        count = request.data.get('count')
+        products = (Product.objects
+                    .order_by('id')
+                    .filter(pk__in=products_id)
+                    .prefetch_related('tags', 'reviews', 'images'))
+        context = [item.count for item in items]
 
-        session_key = request.session.session_key
-        if not session_key:
-            request.session.create()
-            session_key = request.session.session_key
+        if products.exists():
+            serializer = BasketSerializer(products, many=True, context={
+                'context': context})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response([], status=status.HTTP_200_OK)
 
+    def post(self, request: Request):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/sign-in',)
         try:
-            product = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+            item = (self.queryset.get(
+                user_id=request.user.id,
+                product_id=request.data["id"])
+            )
+            item.count += request.data["count"]
+            item.save()
+            answer = self.get(request=request)
+            return answer
 
-        basket_item, created = Basket.objects.get_or_create(
-            session_key=session_key,
-            product=product,
-            defaults={'count': count}
-        )
-
-        if not created:
-            basket_item.count += int(count)
-            basket_item.save()
-
-        basket_items = Basket.objects.filter(session_key=session_key).select_related('product')
-        serializer = BasketItemSerializer(basket_items, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def delete(self, request, *args, **kwargs):
-        product_id = request.data.get('id')
-        session_key = request.session.session_key
-
-        if not session_key:
-            return Response({'error': 'Session key is missing'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            basket_item = Basket.objects.get(session_key=session_key, product_id=product_id)
         except Basket.DoesNotExist:
-            return Response({'error': 'Item not found in basket'}, status=status.HTTP_404_NOT_FOUND)
+            data = {'user_id': request.user.id,
+                    'product': Product.objects.get(id=request.data['id']),
+                    'count': request.data['count']}
+            serializer = ItemInBasketSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-        basket_item.delete()
+            return Response(data='successful operation',
+                            status=status.HTTP_200_OK)
 
-        basket_items = Basket.objects.filter(session_key=session_key).select_related('product')
-        if not basket_items.exists():
-            return Response([], status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request: Request) -> Response:
+        item = (self.queryset.get(
+            user_id=request.user.id,
+            product_id=request.data["id"])
+        )
+        if item.count == request.data["count"]:
+            item.delete()
+        else:
+            item.count -= request.data["count"]
+            item.save()
 
-        serializer = BasketItemSerializer(basket_items, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
+        return_to_basket = self.get(request=request)
+        return return_to_basket

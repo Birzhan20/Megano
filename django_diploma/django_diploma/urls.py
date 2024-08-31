@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/', include('profiles.urls')),
     path('api/', include('catalog.urls')),
     path('api/', include('orders.urls')),
-    path('api/', include('payment.urls')),
+    path('', include('payment.urls')),
 ]
 
 if settings.DEBUG:
