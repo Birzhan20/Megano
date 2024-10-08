@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "category": 2,
+    "price": "999.00",
+    "count": 1,
+    "date": "Thu Aug 29 2024 06:40:02 GMT+0300 (Europe/Moscow)",
+    "title": "Iphone 15 pro",
+    "description": "Iphone 128 GB Silver",
+    "freeDelivery": true,
+    "images": [
+      {
+        "src": "/media/products_images/product_2/15_pro_silver.PNG",
+        "alt": "."
+      }
+    ],
+    "tags": [
+      {
+        "id": 11,
+        "name": "Apple"
+      }
+    ],
+    "reviews": 1,
+    "rating": "0.0"
+  }
+]

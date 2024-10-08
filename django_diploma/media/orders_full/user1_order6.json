@@ -1,0 +1,166 @@
+{
+  "createdAt": "2024-08-31 11:47",
+  "fullName": "Birzhan",
+  "phone": "87473974717",
+  "email": "bbn_289@mail.ru",
+  "deliveryType": "ordinary",
+  "city": "\u0410\u043b\u043c\u0430\u0442\u044b",
+  "address": "asdfghjk",
+  "paymentType": "online",
+  "status": "in processing",
+  "totalCost": 1199,
+  "products": [
+    {
+      "id": 2,
+      "category": 2,
+      "price": "999.00",
+      "count": 1,
+      "date": "Thu Aug 29 2024 06:40:02 GMT+0300 (Europe/Moscow)",
+      "title": "Iphone 15 pro",
+      "description": "Iphone 128 GB Silver",
+      "freeDelivery": true,
+      "images": [
+        {
+          "src": "/media/products_images/product_2/15_pro_silver.PNG",
+          "alt": "."
+        }
+      ],
+      "tags": [],
+      "reviews": 1,
+      "rating": "0.0"
+    }
+  ],
+  "paymentError": null,
+  "filters": {
+    "price": {
+      "minValue": 1,
+      "maxValue": 500000,
+      "currentFromValue": 7,
+      "currentToValue": 27
+    }
+  },
+  "sortRules": [
+    {
+      "id": "rating",
+      "title": "\u041f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u043e\u0441\u0442\u0438"
+    },
+    {
+      "id": "price",
+      "title": "\u0426\u0435\u043d\u0435"
+    },
+    {
+      "id": "reviews",
+      "title": "\u041e\u0442\u0437\u044b\u0432\u0430\u043c"
+    },
+    {
+      "id": "date",
+      "title": "\u041d\u043e\u0432\u0438\u0437\u043d\u0435"
+    }
+  ],
+  "topTags": [],
+  "categories": [
+    {
+      "id": 1,
+      "title": "NVidia inc.",
+      "image": {
+        "src": "http://127.0.0.1:8000/media/nvidia_RHKUnq0.PNG",
+        "alt": "nvidia"
+      },
+      "subcategories": [
+        {
+          "id": 6,
+          "title": "NVidia inc.",
+          "image": {
+            "src": "http://127.0.0.1:8000/media/nvidia_RHKUnq0.PNG",
+            "alt": "nvidia"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Apple inc.",
+      "image": {
+        "src": "http://127.0.0.1:8000/media/Apple_gPrBumU.PNG",
+        "alt": "apple inc."
+      },
+      "subcategories": [
+        {
+          "id": 5,
+          "title": "Apple inc.",
+          "image": {
+            "src": "http://127.0.0.1:8000/media/Apple_gPrBumU.PNG",
+            "alt": "apple inc."
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Sony inc.",
+      "image": {
+        "src": "http://127.0.0.1:8000/media/sony_BJjMctN.PNG",
+        "alt": "sony inc."
+      },
+      "subcategories": [
+        {
+          "id": 4,
+          "title": "Sony inc.",
+          "image": {
+            "src": "http://127.0.0.1:8000/media/sony_BJjMctN.PNG",
+            "alt": "sony inc."
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Asus inc.",
+      "image": {
+        "src": "http://127.0.0.1:8000/media/Asus.PNG",
+        "alt": "Asus"
+      },
+      "subcategories": [
+        {
+          "id": 7,
+          "title": "Asus inc.",
+          "image": {
+            "src": "http://127.0.0.1:8000/media/Asus.PNG",
+            "alt": "Asus"
+          }
+        }
+      ]
+    }
+  ],
+  "catalogFromServer": [],
+  "orders": [],
+  "cart": [],
+  "paymentData": {},
+  "basket": {
+    "2": {
+      "id": 2,
+      "category": 2,
+      "price": "999.00",
+      "count": 1,
+      "date": "Thu Aug 29 2024 06:40:02 GMT+0300 (Europe/Moscow)",
+      "title": "Iphone 15 pro",
+      "description": "Iphone 128 GB Silver",
+      "freeDelivery": true,
+      "images": [
+        {
+          "src": "/media/products_images/product_2/15_pro_silver.PNG",
+          "alt": "."
+        }
+      ],
+      "tags": [],
+      "reviews": 1,
+      "rating": "0.0"
+    }
+  },
+  "searchText": "",
+  "basketCount": {
+    "count": 1,
+    "price": 999
+  },
+  "id": 6
+}
